@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ExternalLink, Menu, X } from "lucide-react";
+import { ExternalLink, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MenuBar } from "@/components/MobileMenu";
 import gsap from "gsap";
@@ -19,19 +19,19 @@ export default function LandingPage() {
   useEffect(() => {
     const scrollSection = scrollSectionRef.current;
     const cubeWrapper = cubeWrapperRef.current;
-
+  
     if (!scrollSection || !cubeWrapper) return;
-
+  
     while (cubeWrapper.firstChild) {
       cubeWrapper.removeChild(cubeWrapper.firstChild);
     }
-
+  
     let currentTextElement = createTextElement(TEXT_ELEMENTS[0]);
     cubeWrapper.appendChild(currentTextElement);
-
+  
     let currentIndex = 0;
     let isAnimating = false;
-
+  
     function createTextElement(text: string): HTMLDivElement {
       const element = document.createElement("div");
       element.className =
@@ -42,42 +42,52 @@ export default function LandingPage() {
       element.textContent = text;
       return element;
     }
-
+  
     const handleWheel = (e: WheelEvent) => {
       if (isAnimating) return;
-
-      const direction = e.deltaY > 0 ? -1 : 1;
-
+  
+      const direction = e.deltaY > 0 ? 1 : -1;
+  
       let nextIndex = (currentIndex + direction) % TEXT_ELEMENTS.length;
       if (nextIndex < 0) nextIndex = TEXT_ELEMENTS.length - 1;
-
+  
       isAnimating = true;
-
+  
       const nextTextElement = createTextElement(TEXT_ELEMENTS[nextIndex]);
       cubeWrapper.appendChild(nextTextElement);
-
+  
       if (direction > 0) {
+        // Scrolling down - new text enters from bottom-right
         gsap.set(nextTextElement, {
-          x: "-100%",
-          rotationY: 45,
+          x: "100%",       // Start from right
+          y: "100%",       // Start from bottom
+          rotationY: -40,  // Start rotated on Y axis
+          rotationX: 30,   // Tilted up for 3D effect
           opacity: 0,
+          scale: 0.8,
           transformPerspective: 1000,
           transformOrigin: "center center",
         });
-
+  
+        // Current text exits to left-middle with slight z movement
         gsap.to(currentTextElement, {
-          x: "100%",
-          rotationY: -45,
+          x: "-120%",      // Exit far to the left
+          y: "20%",        // Slightly down from center
+          z: "50px",       // Slight z movement (not too close)
+          rotationY: 30,   // Rotate as it exits
           opacity: 0,
-          scale: 0.8,
+          scale: 0.9,
           duration: 1.2,
           ease: "power2.inOut",
           transformPerspective: 1000,
         });
-
+  
+        // New text comes in from bottom-right
         gsap.to(nextTextElement, {
           x: "0%",
+          y: "0%",
           rotationY: 0,
+          rotationX: 0,
           opacity: 1,
           scale: 1,
           duration: 1.2,
@@ -93,27 +103,38 @@ export default function LandingPage() {
           },
         });
       } else {
+        // Scrolling up - text enters from left-middle
         gsap.set(nextTextElement, {
-          x: "100%",
-          rotationY: -45,
+          x: "-120%",      // Start far from left
+          y: "20%",        // Slightly down from center
+          z: "50px",       // Slight z movement
+          rotationY: 30,   // Match exit rotation
           opacity: 0,
-          scale: 0.8,
+          scale: 0.9,
           transformPerspective: 1000,
           transformOrigin: "center center",
         });
-
+  
+        // Current text exits to bottom-right
         gsap.to(currentTextElement, {
-          x: "-100%",
-          rotationY: 45,
+          x: "100%",       // Exit to right
+          y: "100%",       // Exit to bottom
+          rotationY: -40,  // Rotate as it leaves
+          rotationX: 30,   // Tilt for 3D effect
           opacity: 0,
+          scale: 0.8,
           duration: 1.2,
           ease: "power2.inOut",
           transformPerspective: 1000,
         });
-
+  
+        // New text comes in from left-middle
         gsap.to(nextTextElement, {
+          z: "0px",
           x: "0%",
+          y: "0%",
           rotationY: 0,
+          rotationX: 0,
           opacity: 1,
           scale: 1,
           duration: 1.2,
@@ -130,9 +151,9 @@ export default function LandingPage() {
         });
       }
     };
-
+  
     scrollSection.addEventListener("wheel", handleWheel, { passive: true });
-
+  
     return () => {
       scrollSection.removeEventListener("wheel", handleWheel);
     };
@@ -152,35 +173,26 @@ export default function LandingPage() {
         <header className="fixed top-0 left-0 right-0 z-40">
           <div className="container mx-auto px-4 py-6 flex items-center justify-between">
             <motion.div
-              className="text-white cursor-pointer relative z-[60]"
-              onClick={() => setMenuOpen(!menuOpen)}
+              className="text-white cursor-pointer relative"
+              onClick={() => {
+                if (!menuOpen) setMenuOpen(true);
+              }}
               whileTap={{ scale: 0.9 }}
+              style={{ pointerEvents: menuOpen ? "none" : "auto" }}
             >
               <Button
                 variant="outline"
                 className="text-[28px] border-0 bg-transparent cursor-pointer hover:bg-transparent p-2"
               >
-                {menuOpen ? (
-                  <motion.div
-                    key="close"
-                    initial={{ rotate: -90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: 90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <X size={28} />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="menu"
-                    initial={{ rotate: 90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: -90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Menu size={28} />
-                  </motion.div>
-                )}
+                <motion.div
+                  key="menu"
+                  initial={{ rotate: 90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: -90, display: "none" }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Menu size={28} />
+                </motion.div>
               </Button>
             </motion.div>
 

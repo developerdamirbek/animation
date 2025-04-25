@@ -31,14 +31,7 @@ export const MenuBar = ({
   const [contentVisible, setContentVisible] = useState(false);
 
   useEffect(() => {
-    if (isOpen) {
-      const timer = setTimeout(() => {
-        setContentVisible(true);
-      }, 200);
-      return () => clearTimeout(timer);
-    } else {
-      setContentVisible(false);
-    }
+    setContentVisible(isOpen);
   }, [isOpen]);
 
   return (
@@ -50,19 +43,18 @@ export const MenuBar = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
           />
 
           <motion.div
             className="absolute inset-0 bg-[#0D00A8]"
             style={{
-              borderBottomLeftRadius: "60%",
-              borderBottomRightRadius: "60%",
+              borderBottomLeftRadius: "50%",
+              borderBottomRightRadius: "50%",
             }}
             initial={{
               y: "-100%",
-              borderBottomLeftRadius: "60%",
-              borderBottomRightRadius: "60%",
+              borderBottomLeftRadius: "50%",
+              borderBottomRightRadius: "50%",
             }}
             animate={{
               y: "0%",
@@ -71,8 +63,8 @@ export const MenuBar = ({
             }}
             exit={{
               y: "-100%",
-              borderBottomLeftRadius: "60%",
-              borderBottomRightRadius: "60%",
+              borderBottomLeftRadius: "50%",
+              borderBottomRightRadius: "50%",
             }}
             transition={{
               duration: 0.4,
@@ -93,13 +85,13 @@ export const MenuBar = ({
           <motion.div
             className="absolute inset-0 bg-[#3F32DA]"
             style={{
-              borderBottomLeftRadius: "100%",
-              borderBottomRightRadius: "100%",
+              borderBottomLeftRadius: "50%",
+              borderBottomRightRadius: "50%",
             }}
             initial={{
               y: "-100%",
-              borderBottomLeftRadius: "100%",
-              borderBottomRightRadius: "100%",
+              borderBottomLeftRadius: "50%",
+              borderBottomRightRadius: "50%",
             }}
             animate={{
               y: "0%",
@@ -108,7 +100,7 @@ export const MenuBar = ({
             }}
             exit={{
               y: "-100%",
-              borderRadius: "60%",
+              borderRadius: "50%",
             }}
             transition={{
               duration: 0.6,
@@ -130,7 +122,7 @@ export const MenuBar = ({
           <motion.div
             className="absolute inset-0 pointer-events-none"
             initial={{ opacity: 0 }}
-            animate={{ opacity: contentVisible ? 0.1 : 0 }}
+            // animate={{ opacity: contentVisible ? 0.1 : 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
