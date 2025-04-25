@@ -19,19 +19,19 @@ export default function LandingPage() {
   useEffect(() => {
     const scrollSection = scrollSectionRef.current;
     const cubeWrapper = cubeWrapperRef.current;
-  
+
     if (!scrollSection || !cubeWrapper) return;
-  
+
     while (cubeWrapper.firstChild) {
       cubeWrapper.removeChild(cubeWrapper.firstChild);
     }
-  
+
     let currentTextElement = createTextElement(TEXT_ELEMENTS[0]);
     cubeWrapper.appendChild(currentTextElement);
-  
+
     let currentIndex = 0;
     let isAnimating = false;
-  
+
     function createTextElement(text: string): HTMLDivElement {
       const element = document.createElement("div");
       element.className =
@@ -42,47 +42,44 @@ export default function LandingPage() {
       element.textContent = text;
       return element;
     }
-  
+
     const handleWheel = (e: WheelEvent) => {
       if (isAnimating) return;
-  
+
       const direction = e.deltaY > 0 ? 1 : -1;
-  
+
       let nextIndex = (currentIndex + direction) % TEXT_ELEMENTS.length;
       if (nextIndex < 0) nextIndex = TEXT_ELEMENTS.length - 1;
-  
+
       isAnimating = true;
-  
+
       const nextTextElement = createTextElement(TEXT_ELEMENTS[nextIndex]);
       cubeWrapper.appendChild(nextTextElement);
-  
+
       if (direction > 0) {
-        // Scrolling down - new text enters from bottom-right
         gsap.set(nextTextElement, {
-          x: "100%",       // Start from right
-          y: "100%",       // Start from bottom
-          rotationY: -40,  // Start rotated on Y axis
-          rotationX: 30,   // Tilted up for 3D effect
+          x: "100%",
+          y: "100%",
+          rotationY: -40,
+          rotationX: 30,
           opacity: 0,
           scale: 0.8,
           transformPerspective: 1000,
           transformOrigin: "center center",
         });
-  
-        // Current text exits to left-middle with slight z movement
+
         gsap.to(currentTextElement, {
-          x: "-120%",      // Exit far to the left
-          y: "20%",        // Slightly down from center
-          z: "50px",       // Slight z movement (not too close)
-          rotationY: 30,   // Rotate as it exits
+          x: "-120%",
+          y: "20%",
+          z: "50px",
+          rotationY: 30,
           opacity: 0,
           scale: 0.9,
           duration: 1.2,
           ease: "power2.inOut",
           transformPerspective: 1000,
         });
-  
-        // New text comes in from bottom-right
+
         gsap.to(nextTextElement, {
           x: "0%",
           y: "0%",
@@ -103,32 +100,29 @@ export default function LandingPage() {
           },
         });
       } else {
-        // Scrolling up - text enters from left-middle
         gsap.set(nextTextElement, {
-          x: "-120%",      // Start far from left
-          y: "20%",        // Slightly down from center
-          z: "50px",       // Slight z movement
-          rotationY: 30,   // Match exit rotation
+          x: "-120%",
+          y: "20%",
+          z: "50px",
+          rotationY: 30,
           opacity: 0,
           scale: 0.9,
           transformPerspective: 1000,
           transformOrigin: "center center",
         });
-  
-        // Current text exits to bottom-right
+
         gsap.to(currentTextElement, {
-          x: "100%",       // Exit to right
-          y: "100%",       // Exit to bottom
-          rotationY: -40,  // Rotate as it leaves
-          rotationX: 30,   // Tilt for 3D effect
+          x: "100%",
+          y: "100%",
+          rotationY: -40,
+          rotationX: 30,
           opacity: 0,
           scale: 0.8,
           duration: 1.2,
           ease: "power2.inOut",
           transformPerspective: 1000,
         });
-  
-        // New text comes in from left-middle
+
         gsap.to(nextTextElement, {
           z: "0px",
           x: "0%",
@@ -151,9 +145,9 @@ export default function LandingPage() {
         });
       }
     };
-  
+
     scrollSection.addEventListener("wheel", handleWheel, { passive: true });
-  
+
     return () => {
       scrollSection.removeEventListener("wheel", handleWheel);
     };

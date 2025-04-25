@@ -122,7 +122,6 @@ export const MenuBar = ({
           <motion.div
             className="absolute inset-0 pointer-events-none"
             initial={{ opacity: 0 }}
-            // animate={{ opacity: contentVisible ? 0.1 : 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
@@ -225,46 +224,46 @@ export const MenuBar = ({
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <div className="container mx-auto flex justify-between items-center">
-              <div className="flex space-x-4">
-                {LANGUAGES.map((lang, index) => (
-                  <motion.button
-                    key={index}
-                    className="text-white/60 hover:text-white transition-colors cursor-pointer"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{
-                      opacity: contentVisible ? 1 : 0,
-                      y: contentVisible ? 0 : 10,
-                    }}
-                    exit={{ opacity: 0, y: 10 }}
-                    transition={{ duration: 0.3, delay: 0.3 + index * 0.05 }}
-                  >
-                    {lang.name}
-                  </motion.button>
-                ))}
-              </div>
+                <div className="flex space-x-4">
+                  {LANGUAGES.map((lang, index) => (
+                    <motion.button
+                      key={index}
+                      className="text-white/60 hover:text-white transition-colors cursor-pointer"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{
+                        opacity: contentVisible ? 1 : 0,
+                        y: contentVisible ? 0 : 10,
+                      }}
+                      exit={{ opacity: 0, y: 10 }}
+                      transition={{ duration: 0.3, delay: 0.3 + index * 0.05 }}
+                    >
+                      {lang.name}
+                    </motion.button>
+                  ))}
+                </div>
 
-              <div className="flex space-x-4">
-                {socialIcons.map((social, index) => (
-                  <motion.a
-                    key={index}
-                    href={social.href}
-                    className="text-white/60 hover:text-white transition-colors"
-                    whileHover={{ scale: 1.2, rotate: 5 }}
-                    whileTap={{ scale: 0.9 }}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{
-                      opacity: contentVisible ? 1 : 0,
-                      y: contentVisible ? 0 : 10,
-                    }}
-                    exit={{ opacity: 0, y: 10 }}
-                    transition={{ duration: 0.3, delay: 0.4 + index * 0.05 }}
-                  >
-                    {social.icon}
-                  </motion.a>
-                ))}
-              </div>
+                <div className="flex space-x-4">
+                  {socialIcons.map((social, index) => (
+                    <motion.a
+                      key={index}
+                      href={social.href}
+                      className="text-white/60 hover:text-white transition-colors"
+                      whileHover={{ scale: 1.2, rotate: 5 }}
+                      whileTap={{ scale: 0.9 }}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{
+                        opacity: contentVisible ? 1 : 0,
+                        y: contentVisible ? 0 : 10,
+                      }}
+                      exit={{ opacity: 0, y: 10 }}
+                      transition={{ duration: 0.3, delay: 0.4 + index * 0.05 }}
+                    >
+                      {social.icon}
+                    </motion.a>
+                  ))}
+                </div>
               </div>
             </motion.div>
           </div>
